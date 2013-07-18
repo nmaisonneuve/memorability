@@ -1,4 +1,4 @@
-source iminterpnn.m
+source ./matlab/iminterpnn.m
 
 %%
 %% Transform panoramic images into perspective image
@@ -10,10 +10,11 @@ source iminterpnn.m
 %% _pitch : vertical angle (0 =bottom , 180 = sky)
 %% _axial: rotat
 
-function cutout(input_path, output_path, _hfov = 90, _yaw = 0, _pitch = 0)
+function cutout(input_path, output_path, _yaw = 0, _hfov = 60, _pitch = 0)
 
 	printf("input_path: %s" , input_path);
 	printf("output_path: %s" , output_path);
+	printf("side angle: %i" , _yaw);
 
 	%% Perspective view parameters
 	iimh = 3328;  iimw=6656;      % input  image size
@@ -24,8 +25,8 @@ function cutout(input_path, output_path, _hfov = 90, _yaw = 0, _pitch = 0)
 	hfov = _hfov * (pi/180);
 	f = oimw/(2*tan(hfov/2)); % focal length [pix]
 
-	%% horizontal angle (0=front side , 180=back side, 90=left side, 270=right side)
-	yaw = _yaw * (pi/180);
+	%% horizontal angle (0=front side , 180=back side, 90=left side, -90=right side)
+	yaw = _yaw * (2 * pi)/360.0;
 
 	%% vertical angle
 	pitch = _pitch * (pi/180);
@@ -60,7 +61,9 @@ function cutout(input_path, output_path, _hfov = 90, _yaw = 0, _pitch = 0)
 	Zt=reshape(PTSt(3,:),oimh, oimw);
 	THETA = atan2(Xt, Zt);                 % cartesian to spherical
 	PHI = atan(Yt./sqrt(Xt.^2+Zt.^2));
-	THETA = THETA+ yaw;
+	%THETA = mod(THETA + yaw,2 * pi);
+	THETA = THETA + yaw;
+
 
 	U = sw * THETA+iuc;
 	V = sh * PHI  +ivc;
@@ -71,4 +74,6 @@ endfunction
 arg_list = argv();
 input_path = arg_list{1};
 output_path = arg_list{2};
-cutout(input_path, output_path);
+side_angle =  str2num(arg_list{3})
+
+cutout(input_path, output_path, side_angle);

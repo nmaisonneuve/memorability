@@ -160,14 +160,17 @@ task :linking_pairwises do
 	i = 0 
 	Subexec.run "rm -Rf results/pairwises", :timeout => 0
 	CSV.foreach("results/pairwises_paris.csv", headers: true) do |row|
+		
 		new_panoID = row[0]
 		old_panoID = row[1]
+
 		localdir = "../data/memorability/paris/#{row[2]}_#{row[3]}"
 		new_filepath = "~/work/memorability/data/paris/#{new_panoID}_zoom_4.jpg"
 		old_filepath = "~/work/memorability/data/old_paris/#{old_panoID}.jpg"
 
  		Subexec.run "mkdir -p results/pairwises/#{i}", :timeout => 0
  		cmd = "ln -s #{new_filepath} ~/work/memorability/results/pairwises/#{i}/#{new_panoID}.jpg"
+ 		
  		Subexec.run cmd, :timeout => 0
  		Subexec.run "ln -s #{old_filepath} ~/work/memorability/results/pairwises/#{i}/#{old_panoID}.jpg", :timeout => 0
  		i += 1
@@ -180,24 +183,37 @@ task :cutout_pairwises do
 	require 'csv'
 	i = 0
 
+	# set up configuration
+	configs = []
 	CSV.foreach("results/pairwises_paris.csv", headers: true) do |row|
-		new_panoID = row[0]
-		old_panoID = row[1]
+		break  if i > 20 
 		
-		new_filepath = "~/work/memorability/data/paris/#{new_panoID}_zoom_4.jpg"
-		old_filepath = "~/work/memorability/data/old_paris/#{old_panoID}.jpg"
- 		
+		if i > 0
+		configs << {
+			new_panoID: row[0],
+		 	old_panoID: row[1],
+		 	# side angle (0=front side , 180=back side, 90=left side, -90=right side)
+		 	side_angle: -90,
+			side_angle_label: "left",
+			pairwise_idx: i
+ 		}
+ 	end
  		i += 1
+ 	end
+ 	#configs = configs.reverse
+ 	#process 
+ 	configs.each do |config| 
+ 		i = config[:pairwise_idx]
+ 		new_filepath = "~/work/memorability/data/paris/#{config[:new_panoID]}_zoom_4.jpg"
+		old_filepath = "~/work/memorability/data/old_paris/#{config[:old_panoID]}.jpg" 		
+ 		new_filepath_cutted = "./results/pairwises/p_#{i}_#{config[:side_angle_label]}_new_#{config[:new_panoID]}.jpg"
+		old_filepath_cutted = "./results/pairwises/p_#{i}_#{config[:side_angle_label]}_old_#{config[:old_panoID]}.jpg"
+
 		# WARNING: may not overwrite previous file
-		# new_filepath_cutted = "#{localdir}/cutted_#{new_panoID}.jpg"
-		# old_filepath_cutted = "#{localdir}/cutted_old_#{old_panoID}.jpg"
-		cmd = "octave matlab/cutter.m '#{new_filepath}' '#{new_filepath_cutted}'"
- 		puts cmd
+		cmd = "octave ./matlab/cutter.m '#{new_filepath}' '#{new_filepath_cutted}' #{config[:side_angle]}"
+		puts cmd
  		Subexec.run cmd, :timeout => 0
- 		
- 		cmd = "octave matlab/cutter.m '#{old_filepath}' '#{old_filepath_cutted}'"
+ 		cmd = "octave ./matlab/cutter.m '#{old_filepath}' '#{old_filepath_cutted}' #{config[:side_angle]}"
  		Subexec.run cmd, :timeout => 0
- 		
- 		puts " old image #{old_filepath} to #{old_filepath_cutted}"
-	 	end
+ 		end
 end
