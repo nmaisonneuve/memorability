@@ -1,0 +1,3 @@
+ssh:
+  login: mylogin
+  password: mypassword

@@ -1,0 +1,8 @@
+development:
+  adapter: postgis
+  pool: 5
+  encoding: unicode
+  database: mydatabase
+  username: username
+  password: password
+  port: 5432
