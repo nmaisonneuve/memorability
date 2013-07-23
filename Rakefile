@@ -178,6 +178,77 @@ task :linking_pairwises do
 end
 
 desc "Transform panoramic images into a set of perspectives"
+task :cutout_new do
+	require "subexec"
+	require 'csv'
+	i = 0
+
+	# set up configuration
+	configs = []
+	CSV.foreach("results/pairwises_paris.csv", headers: true) do |row|
+		if i > 0
+		configs << {
+			panoID: row[0],
+			state: "new",
+		 	# side angle (0=front side , 180=back side, 90=left side, -90=right side)
+		 	filepath: "~/work/memorability/data/paris/#{row[0]}_zoom_4.jpg" ,
+		 	side_angle: 0,
+			side_angle_label: "front",
+			pairwise_idx: i
+ 		}
+ 		end
+ 		i += 1
+ 	end
+ 	pairwise_cutout(configs)
+end
+desc "Transform panoramic images into a set of perspectives"
+task :cutout_old do
+	require "subexec"
+	require 'csv'
+	i = 0
+
+	# set up configuration
+	configs = []
+	CSV.foreach("results/pairwises_paris.csv", headers: true) do |row|
+		if i > 0
+		configs << {
+			panoID: row[1],
+			state: "old",
+		 	# side angle (0=front side , 180=back side, 90=left side, -90=right side)
+		 	filepath: "~/work/memorability/data/old_paris/#{row[1]}.jpg" ,
+		 	side_angle: 0,
+			side_angle_label: "front",
+			pairwise_idx: i
+ 		}
+ 		end
+ 		i += 1
+ 	end
+ 	pairwise_cutout(configs)
+end
+
+def pairwise_cutout (configs)
+# configs = configs.reverse
+ 	# process
+ 	configs.each do |config| 
+ 		i = config[:pairwise_idx]
+ 		filepath_cutted = "./results/pairwises/p_#{i}_#{config[:side_angle_label]}_#{config[:state]}_#{config[:panoID]}.jpg"
+ 		unless File.exists?(filepath_cutted) 
+		#WARNING: may not overwrite previous file
+ 			unless File.exists?(config[:filepath])
+ 				puts "cutting #{config[:side_angle_label]} image #{config[:panoID]}"
+ 				cmd = "octave ./matlab/cutter.m '#{config[:filepath]}' '#{filepath_cutted}' #{config[:side_angle]}"
+ 				p cmd
+ 				Subexec.run cmd, :timeout => 0
+ 			else
+ 				puts "error no original image found #{config[:filepath]}"
+ 			end		
+	 	else
+	 		puts " #{filepath_cutted} already existing"
+	 	end
+ 	end
+end
+
+desc "Transform panoramic images into a set of perspectives"
 task :cutout_pairwises do
 	require "subexec"
 	require 'csv'
