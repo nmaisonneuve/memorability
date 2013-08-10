@@ -21,6 +21,10 @@ task :generate_listpairs  => ["db:init"] do
 
 	# we also minimise the yaw_def between the 2 images 
 	# 'order by yaw_def difference' (smaller yaw_def difference = better)
+	# TODO 
+	# select min (diff, diff(360))
+	# Case When Col1 < Col2 Then Col1 Else Col3 End As
+
 	sql = 'SELECT new_panos."panoID" as new_panoID, new_panos.yaw_deg as new_yaw_deg, old_panos."panoID" as old_panoID,  old_panos.yaw_deg as old_yaw_deg, ST_ASTEXT(new_panos.latlng) as location '
 	sql += ', abs(new_panos.yaw_deg - old_panos.yaw_deg) as diff '
 	sql += ' FROM (SELECT * from panos where label is null) as new_panos'
