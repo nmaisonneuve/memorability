@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="Vector2.js"></script> 
+  <script src="opacity.js"></script> 
+</head>
+<style type="text/css">
+  .slider { width:200px; height:11px; font-size: 13px; }
+</style>
+<body>
+  <h2>Instructions</h2>
+  <ul>
+    <li>
+      Use the slider to see the differences between <b>image 1</b> (at the left of the slider) and <b>image 2</b> (at the right of the slider).<div id="slider1" class="slider">opacity</div>
+    </li>
+    <li><b>Automatic alignment</b>: <div id="msg"> </div>
+    </li>
+    <li> <b>Manual alignment</b>
+      <table><tr>
+        <td><div id="slider_scale" class="slider">scale </div></td>
+        <td> <div id="slider_x_translation" class="slider">X translation</div></td>
+        <td> <div id="slider_y_translation" class="slider">Y translation</div></td>
+      </tr></table>
+  </li>
+  </ul>
+  
+  <div id="radio">
+     View:
+    <input type="radio" id="radio1" name="radio"  value="0" /><label for="radio1">OFF</label>
+  <!--   <input type="radio" id="radio2" name="radio"  value="1" /><label for="radio2">Only translation</label> -->
+    <input type="radio" id="radio3" name="radio" value="2" checked="checked" /><label for="radio3">translation + scale</label>
+  </div>
+  <canvas height="537" width="936" id="before_canvas"></canvas> 
+</body>
+</html>
