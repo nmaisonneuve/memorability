@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="ui.js"></script> 
+  <script src="opacity.js"></script> 
+</head>
+<style type="text/css">
+  .slider { width:200px; height:11px; font-size: 13px; }
+  button{font-size: 15px}
+</style>
+<body>
+  <h2>Instructions  - <button id='next'>Next pair to align</button> </h2>
+
+  <ul>
+    <li>
+      Use the slider "opacity" to see the differences between <b>image 1</b> (at the left of the slider) and <b>image 2</b> (at the right of the slider) </li>
+      <li>find 3 points/landmarks not aligned between image 1 and image 2 </li>
+    <li>Once finished (2 x 3 clicks) the next pair is loaded </li>
+    <li>At any time,  <a id='export' download="batch.json" href=""><b>export your alignments</b></a> into a json file and run the example_batch.m matlab code with it </li>
+  </ul>
+  <h2><div id="msg"></div></h2>
+  <div id="slider1" class="slider">opacity</div> 
+  <br/>
+  <canvas height="500" width="1000" id="before_canvas"></canvas> 
+</body>
+</html>

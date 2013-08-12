@@ -1,5 +1,5 @@
 
-data = importdata('example_batch.csv',';',1);
+data = importdata('example_batch,k8gk.csv',';',1);
 [nb_row, ~] = size(data.data);
 
 for j=1887:nb_row, 
