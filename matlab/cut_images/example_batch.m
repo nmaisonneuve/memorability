@@ -2,7 +2,7 @@
 data = importdata('example_batch.csv',';',1);
 [nb_row, ~] = size(data.data);
 
-for j=1887:nb_row, 
+for j=1:nb_row, 
     try
         % get filenames
         input_path = data.textdata{j+1,1}
