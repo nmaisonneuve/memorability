@@ -1,13 +1,13 @@
 desc "Generate config file for cutting new panoramic images into perspectives"
 task :cutout_new do
 	require 'csv'
-	config_file = "./results/batch_cutting_old_images.csv"
+	config_file = "./results/batch_cutting_new_images.csv"
 	parameters = {
 		yaw_deg: 0, # side angle (0=front side , 180=back side, 90=left side, 270=right side)
 	 	pitch_deg: 8,
-	 	field_of_view_deg: 90,
-	 	output_width: 500,
-	 	output_height: 1500,
+	 	field_of_view_deg: 60,
+	 	output_width: 1000,
+	 	output_height: 500,
 	}
 	# collect the panoIDs
 	inputs = []
@@ -23,12 +23,12 @@ desc "Generate config file for cutting old panoramic images into perspectives"
 task :cutout_old do
 	require 'csv'
 	
-	config_file = "./matlab/cut_images/batch_cutting_old_images.csv"
+	config_file = "./results/batch_cutting_old_images.csv"
 	parameters = {
 		yaw_deg: 0,
 	 	pitch_deg: 8,
-	 	field_of_view_deg: 90,
-	 	output_width: 100,
+	 	field_of_view_deg: 60,
+	 	output_width: 1000,
 	 	output_height: 500,
 	}
 	inputs = []

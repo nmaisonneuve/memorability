@@ -6,7 +6,7 @@ output_path = 'test_v3.jpg';
 
 % horizontal orientation 
 % 0 = center, 90 = left side, 270 = right side
-yaw_deg = 90;
+yaw_deg = 0;
 
 % vertical orientation
 pitch_deg = 8;
